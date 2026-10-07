@@ -10,9 +10,23 @@
 *{box-sizing:border-box;margin:0}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{transition:background .5s,color .5s;background:var(--bg);color:var(--ink);font:400 16px/1.6 'Open Sans',system-ui,sans-serif;overflow-x:hidden}
 .m{font-family:'JetBrains Mono',ui-monospace,monospace}
-nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:calc(14px + env(safe-area-inset-top,0px)) 24px 14px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
-nav b{font-weight:700;letter-spacing:-.3px;display:flex;gap:8px;align-items:center}nav b i{width:10px;height:10px;border-radius:9px;background:var(--or);animation:pulse 2s infinite}
-nav a.gh{font-size:13px;color:var(--mut);text-decoration:none;border:1px solid var(--line);padding:6px 14px;border-radius:99px;transition:.25s}nav a.gh:hover{color:var(--or);border-color:var(--or)}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.nv{max-width:1192px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px}
+.brand{font-weight:800;font-size:17px;letter-spacing:-.3px;text-decoration:none;color:var(--ink)}
+.links{display:flex;align-items:center;gap:26px}
+.links>a,.dd>a{font-size:14px;color:var(--mut);text-decoration:none;transition:color .2s;white-space:nowrap}
+.links>a:hover,.dd>a:hover{color:var(--ink)}
+.links>a.on{color:var(--or)}
+.links a.docs{color:var(--ink);font-weight:700}
+.dd{position:relative}
+.dd small{font-size:10px;color:var(--dim)}
+.dd>a{cursor:pointer}
+.menu{position:absolute;top:100%;left:50%;transform:translate(-50%,8px);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;min-width:170px;box-shadow:0 18px 44px rgba(0,0,0,.12);opacity:0;pointer-events:none;transition:.25s}
+.dd:hover .menu,.dd:focus-within .menu{opacity:1;pointer-events:auto;transform:translate(-50%,4px)}
+.menu a{display:block;padding:9px 14px;font-size:13.5px;color:var(--mut);text-decoration:none;border-radius:8px}
+.menu a:hover{background:var(--alt);color:var(--or)}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:18px;padding:4px 11px;cursor:pointer}
+@media(max-width:900px){.burger{display:block}.links{position:absolute;top:100%;left:0;right:0;background:var(--card);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:0;padding:8px 16px 16px;display:none}.links.open{display:flex}.links>a,.dd>a{padding:10px 8px;border-top:1px solid var(--line)}.menu{position:static;transform:none;box-shadow:none;opacity:1;pointer-events:auto;border:0;padding:0 0 0 12px;display:grid}}
 section{padding:112px 24px;position:relative}.alt{background:var(--alt);border-block:1px solid var(--line)}
 .w{max-width:1192px;margin:auto}.ey{font:600 12px 'JetBrains Mono',monospace;letter-spacing:.6px;text-transform:uppercase;color:var(--or);margin-bottom:10px}
 h2{font-size:clamp(32px,5vw,48px);line-height:1.15;letter-spacing:-1.2px;font-weight:700;max-width:680px}.lead{color:var(--mut);font-size:17px;max-width:660px;margin-top:16px}
@@ -103,14 +117,21 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 #top.s{opacity:1;pointer-events:auto;transform:none}
 #top:hover{border-color:var(--or);transform:translateY(-3px)}
 @media(prefers-reduced-motion:reduce){#sprog{display:none}}
+html{scroll-padding-top:76px}
 /* ScrollRevealText (vanilla port — see script credit below) */
 .srt-w{display:inline-block;will-change:transform,opacity,filter,color}
 @media(prefers-reduced-motion:reduce){.srt-w{opacity:1!important;transform:none!important;filter:none!important}}
 </style></head><body>
 <div id="sprog"></div>
-<nav><b><i></i>AgentBridge</b><div class="nr"><button class="tg" id="tg" aria-label="Toggle dark mode"><span id="ti">☀</span><em id="tt" style="font-style:normal">Light</em></button></div></nav>
+<nav><div class="nv"><a class="brand" href="#hero">AgentBridge</a>
+<button class="burger" id="burger" aria-label="Menu">☰</button>
+<div class="links" id="navLinks">
+<div class="dd"><a href="#problem">The Problem <small>▾</small></a>
+<div class="menu"><a href="#problem">Overview</a><a href="#clickless">Vision loops</a></div></div>
+<a href="#aidom">AI DOM</a><a href="#demo">Interactive Demo</a><a href="#architecture">Architecture</a><a href="#roadmap">Roadmap</a><a href="docs-page.html" class="docs">Docs</a>
+</div></div></nav>
 
-<section class="hero"><div class="glow"></div>
+<section class="hero" id="hero"><div class="glow"></div>
 <h1 id="h1"></h1>
 <p class="sub">AgentBridge is a semantic execution layer that helps AI agents understand, operate, and optimize the existing web.</p>
 <div class="cta"><a class="btn" href="#demo">Try live demo<i>→</i></a></div>
@@ -123,7 +144,7 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 <div class="term"><div class="h"><span>● AGENTBRIDGE</span><span>LIVE</span></div><div id="ht" class="cur"></div></div></div></div>
 </section>
 
-<section class="alt"><div class="w">
+<section class="alt" id="problem"><div class="w">
 <div class="ey rv">The problem</div><h2 class="rv">The web was built for humans.</h2>
 <p class="lead rv">Humans can visually understand a page and act immediately. AI agents often have to repeatedly interpret the same interface, find the same elements, and reconstruct the same state.</p>
 <div class="cols">
@@ -139,7 +160,7 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 <div class="card quote rv"><b>Agents shouldn’t re-read the web every time.</b><p>AgentBridge grounds each page into a stable semantic model once, then acts on meaning instead of pixels.</p></div>
 </div></section>
 
-<section><div class="w">
+<section id="aidom"><div class="w">
 <div class="ey rv">The AI DOM</div><h2 class="rv">The DOM tells browsers how to render. The AI DOM tells agents what it means.</h2>
 <p class="lead rv">Standard web markup is cluttered with layout shims, tracking nodes, and decorative wrappers. The AI DOM extracts pure intent and security context without touching the underlying page code.</p>
 <div class="conv rv"><div class="pane"><div class="t"><span>▬ signup.html — human DOM</span><span>~4.2 KB</span></div>
@@ -180,7 +201,7 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 <div class="res" id="res"><div style="color:#A3A3A3">// High-level invocation</div><div style="color:#34D399;font-weight:600">gmail.get_unread()</div><div>→ Array&lt;EmailItem&gt; (3)</div><div>tokens: -94.2% · model calls: 1 vs 12</div><div style="margin-top:8px">✓ Verified in live DOM</div></div></div></div>
 </div></section>
 
-<section><div class="w">
+<section id="clickless"><div class="w">
 <div class="ey rv">Click faster vs click less</div><h2 class="rv">Don’t make the agent click faster. Make it click less.</h2>
 <p class="lead rv">Accelerating headless browser clicks still leaves latency, jitter, and DOM mutations in the hot path. True efficiency removes redundant browser roundtrips completely.</p>
 <div class="vs"><div class="card rv" style="background:var(--alt)"><div class="ch" style="color:var(--rd)"><span>Traditional vision loop</span><s style="background:#FEF2F2;color:#B91C1C">45 actions</s></div>
@@ -193,7 +214,7 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 <div class="tot" style="margin-top:20px"><span>Total time ~<b class="cnt" data-n="270">0</b> ms<br>Tokens ~<b class="cnt" data-n="1450">0</b></span><b>~92% fewer tokens</b></div></div></div>
 </div></section>
 
-<section class="alt"><div class="w c">
+<section class="alt" id="architecture"><div class="w c">
 <div class="ey rv">Architecture</div><h2 class="rv">Three layers. One semantic bridge.</h2>
 <p class="lead rv">Agents reason on top, the web stays as it is, and AgentBridge translates between them.</p>
 <div class="stack">
@@ -214,7 +235,7 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 <div class="card tier t4 rv" style="--d:.24s"><div><span class="tag">CRITICAL</span><div><h5>Payments &amp; deletions</h5><p>Purchases, account deletion, irreversible operations.</p></div></div><span class="act">Human approval</span></div>
 </div></div></section>
 
-<section class="alt"><div class="w">
+<section class="alt" id="roadmap"><div class="w">
 <div class="ey rv">Connectors &amp; roadmap</div><h2 class="rv">Built to grow with the web.</h2>
 <p class="lead rv">Start with a universal kernel, then add pluggable connectors without touching core modules.</p>
 <div class="road">
@@ -235,9 +256,9 @@ nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)
 <script>
 (function(){
 var rt=document.documentElement,tg=document.getElementById('tg'),ti=document.getElementById('ti'),tt=document.getElementById('tt');
-function th(d){rt.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☾':'☀';tt.textContent=d?'Dark':'Light';try{localStorage.setItem('ab-theme',d?'dark':'light')}catch(e){}}
+function th(d){rt.setAttribute('data-theme',d?'dark':'light');if(ti)ti.textContent=d?'☾':'☀';if(tt)tt.textContent=d?'Dark':'Light';try{localStorage.setItem('ab-theme',d?'dark':'light')}catch(e){}}
 var sv=null;try{sv=localStorage.getItem('ab-theme')}catch(e){}th(sv==='dark');
-tg.onclick=function(){th(rt.getAttribute('data-theme')!=='dark')};
+if(tg)tg.onclick=function(){th(rt.getAttribute('data-theme')!=='dark')};
 var h=document.getElementById('h1'),w=[['Make','the','existing','web'],['native','to','AI','agents.']],i=0;
 w.forEach(function(l,k){l.forEach(function(t){var s=document.createElement('span');s.style.setProperty('--i',i++);s.textContent=t+' ';if(k){var e=document.createElement('em');e.textContent=t+' ';s.textContent='';s.appendChild(e)}h.appendChild(s)});if(!k)h.appendChild(document.createElement('br'))});
 var cnt=function(el){var n=+el.dataset.n,t0=performance.now();(function f(t){var p=Math.min((t-t0)/1600,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3))).toLocaleString();if(p<1)requestAnimationFrame(f)})(t0)};
@@ -335,5 +356,17 @@ items.forEach(function(it,i){seen[i]=true;io.observe(it.el)});
 addEventListener('scroll',kick,{passive:true});
 addEventListener('resize',kick);
 update();
+})();
+</script>
+<script>
+(function(){
+var b=document.getElementById('burger'),l=document.getElementById('navLinks');
+if(b&&l){b.onclick=function(){l.classList.toggle('open')};l.querySelectorAll('a').forEach(function(a){a.onclick=function(){l.classList.remove('open')}})}
+var ids=['problem','aidom','demo','architecture','roadmap'],links={};
+ids.forEach(function(id){var a=document.querySelector('.links a[href="#'+id+'"]');if(a)links[id]=a});
+if('IntersectionObserver' in window){
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){Object.keys(links).forEach(function(k){links[k].classList.remove('on')});if(links[e.target.id])links[e.target.id].classList.add('on')}})},{rootMargin:'-40% 0px -55% 0px'});
+ids.forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});
+}
 })();
 </script></body></html>
