@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SkyShield — Developer Registration Portal</title>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+    .form-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 460px; padding: 28px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+    h2 { margin: 0 0 6px 0; font-size: 20px; color: #38bdf8; }
+    p { color: #94a3b8; font-size: 13px; margin: 0 0 20px 0; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+    input[type="text"], input[type="email"], input[type="password"], select { width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid #475569; border-radius: 6px; padding: 9px 12px; color: #fff; font-size: 13px; outline: none; }
+    input:focus, select:focus { border-color: #38bdf8; }
+    .checkbox-group { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .checkbox-group input { width: auto; margin: 0; }
+    .checkbox-group label { margin: 0; font-weight: 400; font-size: 12px; color: #94a3b8; }
+    button[type="submit"] { width: 100%; background: #0284c7; color: #fff; border: none; padding: 10px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+    button[type="submit"]:hover { background: #0369a1; }
+    .alert-success { display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #34d399; padding: 10px; border-radius: 6px; font-size: 13px; margin-top: 14px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="form-card">
+    <h2>Create Developer Account</h2>
+    <p>Sign up to access AgentBridge autonomous browser runtime APIs</p>
+
+    <form id="signup-form" onsubmit="event.preventDefault(); document.getElementById('success-msg').style.display = 'block';">
+      <div class="form-group">
+        <label for="name">Full Name *</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Sarah Connor" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Work Email *</label>
+        <input type="email" id="email" name="email" placeholder="sarah@sky-shield.io" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password" placeholder="••••••••••••" required />
+      </div>
+
+      <div class="form-group">
+        <label for="role">Engineering Role *</label>
+        <select id="role" name="role" required>
+          <option value="">Select your role...</option>
+          <option value="engineer">Software Engineer / AI Architect</option>
+          <option value="researcher">AI Safety Researcher</option>
+          <option value="product">Product Manager</option>
+          <option value="devops">Site Reliability / DevOps</option>
+        </select>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="newsletter" name="newsletter" checked />
+        <label for="newsletter">Receive weekly AI agent engineering updates</label>
+      </div>
+
+      <button type="submit" id="btn-submit">Register Account</button>
+      <div id="success-msg" class="alert-success">Account created successfully! Welcome to SkyShield.</div>
+    </form>
+  </div>
+</body>
+</html>
