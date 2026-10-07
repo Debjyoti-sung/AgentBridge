@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentBridge — Semantic Execution Layer</title>
+  <link rel="stylesheet" href="sidepanel.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app" class="app-wrapper">
+    <!-- Premium Compact Header -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="url(#bolt-grad)" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="bolt-grad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#38BDF8"/>
+                <stop offset="1" stop-color="#6366F1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="brand-meta">
+          <div class="brand-title">AGENTBRIDGE</div>
+          <div class="brand-subtitle">Semantic Execution Layer</div>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Native Style Connection Indicator -->
+        <div id="conn-badge" class="conn-indicator conn-local" role="button" tabindex="0" title="Running in standalone in-browser mode. Click to toggle Python backend connection (ws://localhost:8765)">
+          <span class="status-dot"></span>
+          <span class="status-label">Local AI Ready</span>
+        </div>
+
+        <!-- Detach Window Button -->
+        <button id="btn-detach" class="icon-btn" title="Open in Detached Window" aria-label="Detach window">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </button>
+
+        <!-- Light / Dark Theme Toggle -->
+        <button id="btn-theme" class="icon-btn" title="Toggle Theme" aria-label="Toggle theme">
+          <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="main-layout">
+      <!-- Left Column: Input, Status, and Live Activity -->
+      <div class="layout-column primary-column">
+
+        <!-- 1. Task Hero Input Card -->
+        <section class="card hero-input-card">
+          <div class="card-header-clean">
+            <span class="section-label">TASK INTENT</span>
+            <span class="mode-tag">Deterministic First</span>
+          </div>
+
+          <div class="task-input-wrapper">
+            <input 
+              type="text" 
+              id="custom-task-input" 
+              class="task-input" 
+              placeholder="What would you like the agent to execute?" 
+              autocomplete="off"
+            />
+            <button id="btn-run-custom" class="btn btn-primary" title="Execute Task">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Run Task</span>
+            </button>
+          </div>
+
+          <!-- Quick Workflows Pills -->
+          <div class="quick-workflows">
+            <span class="quick-lbl">Quick Workflows:</span>
+            <div class="chips-row">
+              <button id="chip-shopping" class="chip" title="Shopping Demo: Find laptops under ₹50k">
+                <span class="chip-accent">🛒</span>
+                <span>Laptops &lt; ₹50k</span>
+              </button>
+              <button id="chip-articles" class="chip" title="Articles Demo: Summarize visible stories">
+                <span class="chip-accent">📰</span>
+                <span>News Digest</span>
+              </button>
+              <button id="chip-form" class="chip" title="Form Demo: Batch fill registration form">
+                <span class="chip-accent">📝</span>
+                <span>Signup Form</span>
+              </button>
+              <button id="chip-gmail" class="chip" title="Gmail Demo: Batch extract and triage emails">
+                <span class="chip-accent">✉️</span>
+                <span>Gmail Triage</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Active Task Status Card -->
+        <section class="card active-task-card">
+          <div class="card-header-clean">
+            <div class="status-indicator-group">
+              <span id="task-status-dot" class="status-pulse-dot dot-idle"></span>
+              <span id="task-status" class="status-pill status-idle">Idle</span>
+            </div>
+            <div class="site-indicator">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span id="site-name">Current Tab</span>
+            </div>
+          </div>
+
+          <!-- Task Goal Title -->
+          <h2 id="task-goal" class="task-goal-heading">Ready for your next task</h2>
+
+          <!-- Live Progress Section -->
+          <div class="progress-container">
+            <div class="progress-meta">
+              <div class="action-tracker">
+                <span class="action-spinner" id="action-spinner"></span>
+                <span id="current-action" class="action-description">Waiting for task execution...</span>
+              </div>
+              <span id="progress-percentage" class="progress-val">0%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Task Control Actions -->
+          <div class="task-controls-bar">
+            <button id="btn-pause" class="btn btn-control btn-secondary" title="Pause Task Execution">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+              <span>Pause</span>
+            </button>
+            <button id="btn-resume" class="btn btn-control btn-secondary" style="display: none;" title="Resume Execution">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Resume</span>
+            </button>
+            <button id="btn-stop" class="btn btn-control btn-danger" title="Stop Agent Immediately">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+              </svg>
+              <span>Stop Agent</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 3. Live Activity Timeline Card -->
+        <section class="card activity-card">
+          <div class="card-header-clean">
+            <div class="header-left">
+              <span class="section-label">LIVE ACTIVITY</span>
+            </div>
+            <span id="steps-counter" class="pill-counter">0 steps</span>
+          </div>
+
+          <div class="timeline-container">
+            <ul id="steps-list" class="activity-timeline">
+              <li class="step-empty">
+                <div class="empty-icon-wrap">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                  </svg>
+                </div>
+                <div class="empty-text">
+                  <strong>No activity yet</strong>
+                  <span>Select a quick workflow above or enter a prompt to begin.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Optimization, Results, Diagnostics -->
+      <div class="layout-column secondary-column">
+
+        <!-- 4. Semantic Optimization Card -->
+        <section class="card optimization-card">
+          <div class="card-header-clean">
+            <div class="header-left">
+              <span class="section-label">OPTIMIZATION LAYER</span>
+            </div>
+            <span id="opt-strategy" class="strategy-badge">Semantic Execution</span>
+          </div>
+
+          <div class="metrics-grid">
+            <!-- Metric 1: Actions Avoided -->
+            <div class="metric-card metric-actions">
+              <div class="metric-top">
+                <span class="metric-title">Actions Avoided</span>
+                <span class="metric-icon-wrap action-icon-wrap">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <div id="metric-actions-avoided" class="metric-number text-accent-green">0</div>
+              <div class="metric-caption">DOM shortcuts taken</div>
+            </div>
+
+            <!-- Metric 2: LLM Calls Saved -->
+            <div class="metric-card metric-llm">
+              <div class="metric-top">
+                <span class="metric-title">LLM Calls Saved</span>
+                <span class="metric-icon-wrap llm-icon-wrap">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                  </svg>
+                </span>
+              </div>
+              <div id="metric-model-calls" class="metric-number text-accent-blue">0</div>
+              <div class="metric-caption">Rule-based parsing</div>
+            </div>
+
+            <!-- Metric 3: Latency Saved -->
+            <div class="metric-card metric-latency">
+              <div class="metric-top">
+                <span class="metric-title">Latency Saved</span>
+                <span class="metric-icon-wrap latency-icon-wrap">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <div id="metric-latency" class="metric-number text-accent-purple">0.0s</div>
+              <div class="metric-caption">Zero click-wait loops</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. AI Result Card (Shows upon completion) -->
+        <section id="result-card" class="card result-card" style="display: none;">
+          <div class="card-header-clean">
+            <div class="header-left">
+              <span class="section-label text-success">SYNTHESIS & OUTPUT</span>
+            </div>
+            <button id="btn-copy-result" class="btn-xs btn-ghost" title="Copy result to clipboard">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div id="result-content" class="result-body"></div>
+        </section>
+
+        <!-- 6. Progressive Diagnostics & AI DOM Card -->
+        <section class="card diagnostics-card">
+          <div class="diagnostics-toggle-row">
+            <div class="diag-header-info">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              <span class="diag-title">Diagnostics &amp; AI DOM</span>
+            </div>
+            <button id="btn-toggle-aidom" class="btn-xs btn-ghost" title="Inspect current page AI DOM representation">
+              <span id="aidom-btn-text">Inspect DOM</span>
+              <svg id="aidom-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <div id="aidom-preview" class="aidom-preview-drawer" style="display: none;">
+            <div class="aidom-toolbar">
+              <span class="schema-tag">Compact Machine DOM</span>
+              <button id="btn-copy-aidom" class="btn-xs btn-ghost" title="Copy JSON Schema">Copy Schema</button>
+            </div>
+            <pre><code id="aidom-code">Click "Inspect DOM" to parse current webpage.</code></pre>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Global Toast Notification -->
+    <div id="app-toast" class="app-toast" style="display: none;">
+      <span id="toast-message">Notification</span>
+    </div>
+  </div>
+
+  <script src="sidepanel.bundle.js"></script>
+</body>
+</html>

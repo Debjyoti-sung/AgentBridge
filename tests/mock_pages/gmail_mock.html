@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gmail - Inbox (Test Mock)</title>
+  <style>
+    body { font-family: Roboto, Arial, sans-serif; margin: 0; background: #f6f8fc; }
+    .header { background: #fff; padding: 12px 24px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 20px; font-weight: bold; color: #d93025; }
+    .inbox-container { max-width: 900px; margin: 24px auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    tr { border-bottom: 1px solid #f1f3f4; cursor: pointer; }
+    tr:hover { box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15); }
+    td { padding: 10px 14px; font-size: 14px; }
+    /* Gmail Unread styling */
+    tr.zE { font-weight: bold; background: #fff; }
+    /* Gmail Read styling */
+    tr.yO { font-weight: normal; background: #f2f6fc80; color: #5f6368; }
+    .sender { width: 200px; }
+    .subject-snippet { max-width: 450px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .snippet { color: #5f6368; font-weight: normal; margin-left: 6px; }
+    .date { width: 80px; text-align: right; color: #5f6368; }
+  </style>
+</head>
+<body data-agentbridge-app="gmail">
+  <div class="header">
+    <div class="logo">Gmail (Simulation)</div>
+    <div class="search"><input type="text" placeholder="Search mail" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #dadce0; width: 300px;"></div>
+  </div>
+
+  <div class="inbox-container">
+    <table>
+      <tbody>
+        <tr class="zA zE" data-unread="true">
+          <td style="width: 20px;"><input type="checkbox"></td>
+          <td class="sender"><span email="eng-lead@deepmind.com">DeepMind Research</span></td>
+          <td class="subject-snippet">
+            <span data-field="subject">URGENT: Review of AgentBridge Architecture Spec</span>
+            <span class="snippet" data-field="snippet">- Please review the semantic execution layer benchmarks before tomorrow's executive review meeting.</span>
+          </td>
+          <td class="date" data-field="date">10:14 AM</td>
+        </tr>
+
+        <tr class="zA zE" data-unread="true">
+          <td style="width: 20px;"><input type="checkbox"></td>
+          <td class="sender"><span email="security@company.org">Infra Security Team</span></td>
+          <td class="subject-snippet">
+            <span data-field="subject">Action Required: Quarterly API Key Rotation</span>
+            <span class="snippet" data-field="snippet">- Reminder to rotate all agent runtime service credentials by Friday 5 PM PST.</span>
+          </td>
+          <td class="date" data-field="date">9:30 AM</td>
+        </tr>
+
+        <tr class="zA zE" data-unread="true">
+          <td style="width: 20px;"><input type="checkbox"></td>
+          <td class="sender"><span email="devops@cloud.com">DevOps Alerts</span></td>
+          <td class="subject-snippet">
+            <span data-field="subject">Cluster autoscaling trigger activated</span>
+            <span class="snippet" data-field="snippet">- Cluster us-east-1 scaled up by 4 worker nodes to accommodate inference workload.</span>
+          </td>
+          <td class="date" data-field="date">8:45 AM</td>
+        </tr>
+
+        <tr class="zA yO" data-unread="false">
+          <td style="width: 20px;"><input type="checkbox"></td>
+          <td class="sender"><span email="newsletter@techweekly.com">Tech Weekly</span></td>
+          <td class="subject-snippet">
+            <span data-field="subject">Issue #142: Future of Browser Agents</span>
+            <span class="snippet" data-field="snippet">- Why semantic DOM interfaces outperform pixel-only click agents in production.</span>
+          </td>
+          <td class="date" data-field="date">Oct 5</td>
+        </tr>
+
+        <tr class="zA yO" data-unread="false">
+          <td style="width: 20px;"><input type="checkbox"></td>
+          <td class="sender"><span email="billing@saas.com">Cloud SaaS</span></td>
+          <td class="subject-snippet">
+            <span data-field="subject">Your monthly receipt for October</span>
+            <span class="snippet" data-field="snippet">- Thank you for your payment of $49.00.</span>
+          </td>
+          <td class="date" data-field="date">Oct 4</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "agentbridge-extension",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "esbuild ../src/background/service-worker.ts --bundle --outfile=background.bundle.js --format=esm && esbuild ../src/content/index.ts --bundle --outfile=content.bundle.js && esbuild ../src/sidepanel/index.ts --bundle --outfile=sidepanel.bundle.js",
+    "watch": "esbuild ../src/background/service-worker.ts ../src/content/index.ts ../src/sidepanel/index.ts --bundle --outdir=. --watch"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0"
+  }
+}

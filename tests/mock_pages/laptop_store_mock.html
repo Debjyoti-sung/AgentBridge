@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ElectroHub — Premium Laptops & Notebooks</title>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+    .header { max-width: 1100px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 16px; }
+    h1 { margin: 0; font-size: 24px; color: #38bdf8; }
+    .search-bar { display: flex; gap: 8px; align-items: center; }
+    input[type="search"] { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 8px 12px; border-radius: 6px; width: 280px; }
+    select { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 8px 12px; border-radius: 6px; }
+    .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .product-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+    .product-card:hover { transform: translateY(-3px); border-color: #38bdf8; }
+    .product-title { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 8px; }
+    .specs { font-size: 12px; color: #94a3b8; margin-bottom: 12px; line-height: 1.4; }
+    .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .price { font-size: 18px; font-weight: 700; color: #4ade80; }
+    .rating { font-size: 12px; color: #facc15; }
+    .btn-buy { background: #0284c7; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; width: 100%; }
+    .btn-buy:hover { background: #0369a1; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>ElectroHub</h1>
+    <div class="search-bar">
+      <input type="search" placeholder="Search laptops..." aria-label="Search laptops" id="search-box" />
+      <select aria-label="Sort laptops" id="sort-select">
+        <option value="featured">Featured</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" id="product-grid">
+    <!-- Item 1: Under 50k -->
+    <div class="product-card" data-entity="product" data-price="32990">
+      <div>
+        <div class="product-title">Acer Aspire Lite 15</div>
+        <div class="specs">AMD Ryzen 3 5300U • 8GB RAM • 512GB SSD • 15.6" FHD Anti-Glare</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹32,990</span>
+          <span class="rating">★ 4.1</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Item 2: Under 50k -->
+    <div class="product-card" data-entity="product" data-price="38990">
+      <div>
+        <div class="product-title">Lenovo IdeaPad Slim 3</div>
+        <div class="specs">Intel Core i3 12th Gen • 8GB RAM • 512GB SSD • 14" FHD IPS Display</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹38,990</span>
+          <span class="rating">★ 4.2</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Item 3: Under 50k -->
+    <div class="product-card" data-entity="product" data-price="41990">
+      <div>
+        <div class="product-title">HP 15s Ryzen 3 Quad Core</div>
+        <div class="specs">AMD Ryzen 3 7320U • 8GB LPDDR5 • 512GB SSD • Micro-Edge Display</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹41,990</span>
+          <span class="rating">★ 4.3</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Item 4: Under 50k -->
+    <div class="product-card" data-entity="product" data-price="44990">
+      <div>
+        <div class="product-title">ASUS Vivobook 15 Thin & Light</div>
+        <div class="specs">Intel Core i3-1315U • 16GB RAM • 512GB NVMe SSD • Fingerprint Sensor</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹44,990</span>
+          <span class="rating">★ 4.2</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Item 5: Under 50k -->
+    <div class="product-card" data-entity="product" data-price="49990">
+      <div>
+        <div class="product-title">Dell Vostro 3520</div>
+        <div class="specs">Intel Core i5-1235U • 8GB RAM • 512GB SSD • 120Hz 15.6" Screen</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹49,990</span>
+          <span class="rating">★ 4.0</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Item 6: Over 50k -->
+    <div class="product-card" data-entity="product" data-price="94990">
+      <div>
+        <div class="product-title">Apple MacBook Air M2</div>
+        <div class="specs">Apple M2 Chip • 8-Core CPU • 8GB Unified Memory • 256GB SSD • Liquid Retina</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹94,990</span>
+          <span class="rating">★ 4.8</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Item 7: Over 50k -->
+    <div class="product-card" data-entity="product" data-price="114990">
+      <div>
+        <div class="product-title">ASUS ROG Strix G16 Gaming</div>
+        <div class="specs">Intel Core i7-13650HX • RTX 4060 • 16GB DDR5 • 1TB SSD • 165Hz FHD+</div>
+      </div>
+      <div>
+        <div class="price-row">
+          <span class="price">₹1,14,990</span>
+          <span class="rating">★ 4.7</span>
+        </div>
+        <button class="btn-buy" role="button">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
