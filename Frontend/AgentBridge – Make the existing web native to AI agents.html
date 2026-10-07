@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AgentBridge – Make the existing web native to AI agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--alt:#FAFAF8;--ink:#111;--ink2:#2E1822;--mut:#5F6066;--dim:#8D8E94;--line:rgba(0,0,0,.07);--or:#FF5A2A;--ort:#FFF1EB;--gr:#059669;--rd:#DC2626;--card:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme=dark]{--bg:#121110;--alt:#181716;--ink:#f5f2ee;--ink2:#f5f2ee;--mut:#a9a6a2;--dim:#7d7a77;--line:rgba(255,255,255,.1);--ort:#2a1a14;--card:#1c1b1a}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{transition:background .5s,color .5s;background:var(--bg);color:var(--ink);font:400 16px/1.6 'Open Sans',system-ui,sans-serif;overflow-x:hidden}
+.m{font-family:'JetBrains Mono',ui-monospace,monospace}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:calc(14px + env(safe-area-inset-top,0px)) 24px 14px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+nav b{font-weight:700;letter-spacing:-.3px;display:flex;gap:8px;align-items:center}nav b i{width:10px;height:10px;border-radius:9px;background:var(--or);animation:pulse 2s infinite}
+nav a.gh{font-size:13px;color:var(--mut);text-decoration:none;border:1px solid var(--line);padding:6px 14px;border-radius:99px;transition:.25s}nav a.gh:hover{color:var(--or);border-color:var(--or)}
+section{padding:112px 24px;position:relative}.alt{background:var(--alt);border-block:1px solid var(--line)}
+.w{max-width:1192px;margin:auto}.ey{font:600 12px 'JetBrains Mono',monospace;letter-spacing:.6px;text-transform:uppercase;color:var(--or);margin-bottom:10px}
+h2{font-size:clamp(32px,5vw,48px);line-height:1.15;letter-spacing:-1.2px;font-weight:700;max-width:680px}.lead{color:var(--mut);font-size:17px;max-width:660px;margin-top:16px}
+.c{text-align:center}.c h2,.c .lead{margin-inline:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.04);transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.card:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(0,0,0,.08)}
+.tag{font:600 11px 'JetBrains Mono',monospace;padding:3px 10px;border-radius:5px;background:var(--ort);color:var(--or);display:inline-block}
+.tg{display:flex;align-items:center;gap:8px;cursor:pointer;font:600 12px 'JetBrains Mono',monospace;color:var(--mut);background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:99px;transition:.25s}.tg:hover{color:var(--or);border-color:var(--or)}.tg span{display:inline-block;transition:transform .5s cubic-bezier(.2,.7,.2,1)}.tg:active span{transform:rotate(180deg) scale(.8)}.nr{display:flex;gap:10px;align-items:center}
+:root[data-theme=dark] .row[style*=opacity]{opacity:.5}
+/* hero */
+.hero{padding-top:176px;text-align:center;overflow:hidden}
+.glow{position:absolute;left:50%;top:80px;width:720px;height:580px;margin-left:-360px;background:radial-gradient(50% 50% at 50% 50%,rgba(255,90,42,.35),rgba(255,122,69,.15) 50%,transparent);filter:blur(24px);opacity:.7;animation:float 9s ease-in-out infinite;pointer-events:none}
+.hero h1{font-size:clamp(42px,7vw,76px);line-height:1.08;letter-spacing:-1.9px;font-weight:700;color:var(--ink2);position:relative;max-width:900px;margin:auto}
+.hero h1 span{display:inline-block;opacity:0;transform:translateY(32px);filter:blur(8px);animation:up .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i)*90ms + 150ms)}
+.hero h1 em{color:var(--or)}
+.hero p.sub{font-size:20px;line-height:1.5;max-width:470px;margin:28px auto 0;position:relative;opacity:0;animation:up .9s .9s forwards}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:15px 30px;border-radius:99px;background:#3B1422;color:#fff;font-weight:600;font-size:15px;text-decoration:none;border:0;cursor:pointer;font-family:inherit;transition:transform .3s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(255,90,42,.28)}.btn i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--or);font-style:normal;transition:transform .3s}.btn:hover i{transform:translateX(4px)}
+.cta{margin-top:34px;position:relative;opacity:0;animation:up .9s 1.1s forwards}
+.sub2{margin-top:96px;position:relative}.sub2 h3{font-size:clamp(26px,3.4vw,38px);letter-spacing:-.95px;font-weight:600;color:var(--ink2)}.sub2 p{font-size:24px;font-weight:600;color:var(--mut);letter-spacing:-.5px;margin-top:6px}
+.insp{max-width:896px;margin:48px auto 0;padding:12px;text-align:left;position:relative}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:0 12px 12px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.dots{display:flex;gap:6px}.dots i{width:12px;height:12px;border-radius:9px;background:#FF5F56}.dots i:nth-child(2){background:#FFBD2E}.dots i:nth-child(3){background:#27C93F}
+.url{font:11px 'JetBrains Mono',monospace;color:var(--mut);background:var(--alt);border:1px solid var(--line);border-radius:6px;padding:4px 12px}
+.g2{display:grid;grid-template-columns:1.1fr 1fr;gap:12px}
+.li{background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px;align-content:start}
+.row{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:11px;color:var(--mut);display:flex;justify-content:space-between;gap:8px;position:relative;transition:.4s}
+.row b{color:var(--ink);font-weight:600;display:block}.row.on{border-color:rgba(255,90,42,.5);box-shadow:0 0 0 3px rgba(255,90,42,.1)}
+.term{background:#111;border-radius:12px;padding:14px;font:11px/1.7 'JetBrains Mono',monospace;color:#737373;min-height:200px;overflow:hidden}
+.term .h{color:var(--or);border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:8px;margin-bottom:8px;display:flex;justify-content:space-between}
+.term .o{color:#34D399}.term .f{color:#FF7A45}.term div{white-space:pre-wrap}
+.cur::after{content:"▍";color:var(--or);animation:blink 1s steps(2) infinite}
+/* problem */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px}.cols .card{padding:36px}
+.ch{display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);font-weight:700;font-size:18px;margin-bottom:22px;gap:8px}
+.ch s{text-decoration:none;font:500 11px 'JetBrains Mono',monospace;padding:4px 10px;border-radius:4px}.ok s{background:#ECFDF5;color:#047857}.bad s{background:#FEF2F2;color:#B91C1C}
+.pill{font:11px 'JetBrains Mono',monospace;background:var(--alt);border:1px solid var(--line);border-radius:4px;padding:4px 10px;display:inline-block;margin:0 0 10px;color:var(--mut)}.pill.r{background:#FEF2F2;border-color:#FECACA;color:#B91C1C;font-weight:600}
+.ar{color:var(--dim);margin:0 4px}.col-p{font-size:14px;color:var(--mut);margin:18px 0}.ft{border-top:1px solid var(--line);padding-top:18px;margin-top:24px;display:flex;justify-content:space-between;font:12px 'JetBrains Mono',monospace;color:#047857;gap:8px}.bad .ft{color:var(--rd)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}.steps div{background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:12px;font:600 12px 'JetBrains Mono',monospace;text-align:center}.steps small{display:block;font-weight:400;font-size:10px;color:var(--dim)}
+.quote{max-width:768px;margin:48px auto 0;padding:32px;text-align:center;position:relative;overflow:hidden}.quote:before{content:"";position:absolute;top:0;left:50%;margin-left:-96px;width:192px;height:4px;background:var(--or)}
+.quote b{font-size:20px;letter-spacing:-.5px}.quote p{font-size:14px;color:var(--mut);margin-top:8px}
+/* ai dom */
+.conv{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:56px;position:relative}
+.pane{border-radius:16px;overflow:hidden;border:1px solid var(--line);font:12px/1.9 'JetBrains Mono',monospace}.pane .t{padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line);color:var(--mut);display:flex;justify-content:space-between}
+.pane pre{padding:20px 24px;font:inherit;color:var(--mut);background:var(--alt);min-height:230px;overflow:auto}.pane.ai{border-color:rgba(255,90,42,.4)}.pane.ai .t{background:var(--ort);color:var(--or);font-weight:600}.pane.ai pre{background:var(--card);color:var(--ink)}
+.pane .x{padding:10px 20px;font-size:11px;background:#FEF2F2;color:#B91C1C}.pane.ai .x{background:#ECFDF5;color:#065F46}
+.pillc{position:absolute;left:50%;top:50%;margin:-20px;width:40px;height:40px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center;font-size:16px;box-shadow:0 0 0 0 rgba(255,90,42,.5);animation:ring 2.2s infinite}
+.note{margin-top:32px;padding:16px;display:flex;gap:12px;background:var(--alt);border:1px solid var(--line);border-radius:12px;font-size:13px;color:var(--mut)}.note b{color:var(--ink)}
+/* demo */
+.dh{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}.dh .btn{background:#111;border-radius:12px;padding:12px 24px;font-size:14px}.dh code{font:600 17px 'JetBrains Mono',monospace}
+.deck{padding:24px;margin-top:40px;display:grid;grid-template-columns:1.4fr 1fr;gap:28px}.deck:hover{transform:none}
+.inb{background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start}.inb .row{padding:12px;font-size:12px}.inb .row small{font:11px 'JetBrains Mono',monospace;color:var(--dim)}
+.dark{background:#111;border-radius:12px;padding:20px;font:12px/1.7 'JetBrains Mono',monospace;color:#737373;min-height:340px}.dark .h{color:var(--or);font-weight:600;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:12px;margin-bottom:12px}
+.res{margin-top:14px;padding:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:8px;color:#34D399;opacity:0;transform:translateY(8px);transition:.6s}.res.s{opacity:1;transform:none}
+.dark div.l{opacity:0;transform:translateX(-8px);animation:in .4s forwards}
+/* click less */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px}.vs .card{padding:32px}.vs .card:hover{transform:none}
+.lines{display:grid;gap:8px;margin:22px 0}.lines div{display:flex;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px;font:12px 'JetBrains Mono',monospace;color:var(--mut)}.lines b{color:var(--rd)}.good .lines div{background:var(--alt)}.good .lines b{color:var(--or)}
+.bg{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:14px}.bg i{display:block;height:100%;width:0;border-radius:9px;transition:width 1.8s cubic-bezier(.2,.7,.2,1)}
+.tot{border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;font:13px 'JetBrains Mono',monospace;color:var(--mut);gap:12px}.tot b{color:var(--rd)}.good .tot b{color:var(--gr)}.good{border-color:rgba(255,90,42,.4)}
+/* arch */
+.stack{max-width:896px;margin:56px auto 0;display:grid;gap:12px}.lay{padding:26px 24px;text-align:center}.lay small{font:11px 'JetBrains Mono',monospace;color:var(--dim);text-transform:uppercase}.lay h4{font-size:18px;margin:4px 0 10px}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.chips span{font:12px 'JetBrains Mono',monospace;background:var(--alt);border:1px solid var(--line);border-radius:6px;padding:4px 10px;color:var(--mut)}.core{border:2px solid rgba(255,90,42,.4);padding:32px;text-align:left}.core h4{font:600 16px 'JetBrains Mono',monospace;text-transform:uppercase;display:flex;align-items:center;gap:8px}.core h4:before{content:"";width:12px;height:12px;border-radius:9px;background:var(--or);animation:pulse 2s infinite}
+.mods{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.mods div{background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;font:600 12px 'JetBrains Mono',monospace;transition:.3s}.mods div:hover{border-color:var(--or);transform:translateY(-3px)}.mods small{display:block;font-weight:400;font-size:10px;color:var(--dim)}.mods .hl{background:var(--ort);color:var(--or);border-color:rgba(255,90,42,.25)}
+.wire{text-align:center;font:12px 'JetBrains Mono',monospace;color:var(--or);font-weight:600;position:relative;overflow:hidden}.wire:after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);transform:translateX(-100%);animation:sweep 3s infinite}
+/* safety */
+.tiers{display:grid;gap:16px;margin-top:56px}.tier{padding:24px;display:flex;justify-content:space-between;align-items:center;gap:20px;background:var(--alt);flex-wrap:wrap}.tier>div{display:flex;gap:16px;align-items:center}.tier h5{font-size:16px}.tier p{font-size:13px;color:var(--mut)}
+.tier .tag{white-space:nowrap}.act{font:600 12px 'JetBrains Mono',monospace;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+.t1 .tag{background:#D1FAE5;color:#065F46}.t1 .act{color:#047857}.t2 .tag{background:#DBEAFE;color:#1E40AF}.t2 .act{color:#1D4ED8}.t3,.t3 .act{border-color:rgba(255,90,42,.3)}.t3 .act{color:var(--or)}.t4,.t4 .act{border-color:#FECACA}.t4 .tag{background:#FEE2E2;color:#991B1B}.t4 .act{color:#B91C1C}
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}.ph{padding:24px;position:relative;overflow:hidden}.ph.a{border:2px solid var(--or)}.ph h5{font-size:16px;margin:12px 0 6px}.ph p{font-size:13px;color:var(--mut);min-height:80px}.ph footer{border-top:1px solid var(--line);padding-top:12px;margin-top:16px;font:11px 'JetBrains Mono',monospace;color:var(--dim)}.ph.a footer{color:var(--or);font-weight:600}
+.ph .st{float:right;font:600 10px 'JetBrains Mono',monospace;padding:2px 8px;border-radius:4px;background:var(--alt);color:var(--mut)}.ph.d .st{background:#ECFDF5;color:#047857}.ph.a .st{background:var(--or);color:#fff}
+.bm{margin-top:32px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.bm b{font-size:15px}.bm p{font-size:13px;color:var(--mut);max-width:760px}
+/* final */
+.fin{text-align:center;overflow:hidden}.fin:before{content:"";position:absolute;left:50%;bottom:-80px;width:700px;height:300px;margin-left:-350px;border-radius:50%;background:rgba(255,90,42,.15);filter:blur(60px);animation:float 8s ease-in-out infinite}
+.fin h2{font-size:clamp(40px,7vw,64px);font-weight:800;letter-spacing:-1.6px;line-height:1.1;max-width:780px;margin:20px auto 0}.fin .lead{margin:20px auto 0;font-size:20px}.fin .btn{background:#111;margin-top:40px;position:relative}
+footer.f{padding:28px 24px;text-align:center;font:12px 'JetBrains Mono',monospace;color:var(--dim);border-top:1px solid var(--line)}
+/* motion */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}.rv.in{opacity:1;transform:none}
+@keyframes up{to{opacity:1;transform:none;filter:none}}@keyframes float{50%{transform:translateY(-22px) scale(1.05)}}@keyframes pulse{50%{opacity:.4;transform:scale(.8)}}@keyframes blink{50%{opacity:0}}@keyframes in{to{opacity:1;transform:none}}@keyframes sweep{to{transform:translateX(100%)}}@keyframes ring{70%{box-shadow:0 0 0 18px rgba(255,90,42,0)}100%{box-shadow:0 0 0 0 rgba(255,90,42,0)}}
+@media(max-width:900px){.g2,.cols,.conv,.deck,.vs{grid-template-columns:1fr}.conv{gap:56px}.road{grid-template-columns:1fr 1fr}.mods{grid-template-columns:1fr 1fr}section{padding:84px 20px}.hero{padding-top:140px}.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.road{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}.rv,.hero h1 span,.hero p.sub,.cta{opacity:1;transform:none;filter:none}}
+/* additive scroll extras (theme + existing animations untouched) */
+#sprog{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;background:var(--or);box-shadow:0 0 12px rgba(255,90,42,.6)}
+nav{transition:box-shadow .3s}nav.scrolled{box-shadow:0 8px 30px rgba(0,0,0,.12)}
+#top{position:fixed;right:22px;bottom:22px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--or);font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(12px);transition:.35s;z-index:60;box-shadow:0 12px 30px rgba(0,0,0,.12)}
+#top.s{opacity:1;pointer-events:auto;transform:none}
+#top:hover{border-color:var(--or);transform:translateY(-3px)}
+@media(prefers-reduced-motion:reduce){#sprog{display:none}}
+/* ScrollRevealText (vanilla port — see script credit below) */
+.srt-w{display:inline-block;will-change:transform,opacity,filter,color}
+@media(prefers-reduced-motion:reduce){.srt-w{opacity:1!important;transform:none!important;filter:none!important}}
+</style></head><body>
+<div id="sprog"></div>
+<nav><b><i></i>AgentBridge</b><div class="nr"><button class="tg" id="tg" aria-label="Toggle dark mode"><span id="ti">☀</span><em id="tt" style="font-style:normal">Light</em></button></div></nav>
+
+<section class="hero"><div class="glow"></div>
+<h1 id="h1"></h1>
+<p class="sub">AgentBridge is a semantic execution layer that helps AI agents understand, operate, and optimize the existing web.</p>
+<div class="cta"><a class="btn" href="#demo">Try live demo<i>→</i></a></div>
+<div class="sub2 rv"><h3>A semantic execution layer for AI agents</h3><p>Turn the human web into a machine-readable interface.</p></div>
+<div class="card insp rv"><div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">🔒 mail.google.com/inbox</div><span class="tag">AI DOM ON</span></div>
+<div class="g2"><div class="li">
+<div class="row on"><span><b>Weekly report</b>Team sync notes for Friday…</span><span class="m">10:42</span></div>
+<div class="row"><span><b>Invoice #2041</b>Payment due in 3 days…</span><span class="m">09:15</span></div>
+<div class="row"><span><b>Interview slot</b>Confirm your availability…</span><span class="m">Yesterday</span></div></div>
+<div class="term"><div class="h"><span>● AGENTBRIDGE</span><span>LIVE</span></div><div id="ht" class="cur"></div></div></div></div>
+</section>
+
+<section class="alt"><div class="w">
+<div class="ey rv">The problem</div><h2 class="rv">The web was built for humans.</h2>
+<p class="lead rv">Humans can visually understand a page and act immediately. AI agents often have to repeatedly interpret the same interface, find the same elements, and reconstruct the same state.</p>
+<div class="cols">
+<div class="card ok rv"><div class="ch"><span>● Human workflow</span><s>Instant · intuitive</s></div>
+<div class="m" style="font-size:13px;color:var(--mut)">Look <span class="ar">→</span> Click <span class="ar">→</span> Done</div>
+<div class="steps"><div>See<small>glance</small></div><div>Understand<small>context</small></div><div>Click<small>1 action</small></div><div>Done<small>instant</small></div></div>
+<p class="col-p">Humans effortlessly skip past navigational noise, styling layers, and decorative wrappers straight to semantic action without trial and error.</p>
+<div class="ft"><span>latency: ~1s</span><span>errors: rare</span></div></div>
+<div class="card bad rv" style="--d:.12s"><div class="ch"><span>● Current vision-agent workflow</span><s>Slow · fragile</s></div>
+<div><span class="pill">Screenshot</span><span class="ar">→</span><span class="pill">Locate</span><span class="ar">→</span><span class="pill">Click</span><span class="ar">→</span><span class="pill">Wait</span><span class="ar">→</span><span class="pill">Re-observe</span><span class="ar">→</span><span class="pill r">Repeat ×15</span></div>
+<p class="col-p">Raw pixel coordinates, shifting layouts, and multi-second visual model calls create high latency, runaway token bills, and frequent point-and-click failures.</p>
+<div class="ft"><span>latency: ~45s</span><span>tokens: very high</span></div></div></div>
+<div class="card quote rv"><b>Agents shouldn’t re-read the web every time.</b><p>AgentBridge grounds each page into a stable semantic model once, then acts on meaning instead of pixels.</p></div>
+</div></section>
+
+<section><div class="w">
+<div class="ey rv">The AI DOM</div><h2 class="rv">The DOM tells browsers how to render. The AI DOM tells agents what it means.</h2>
+<p class="lead rv">Standard web markup is cluttered with layout shims, tracking nodes, and decorative wrappers. The AI DOM extracts pure intent and security context without touching the underlying page code.</p>
+<div class="conv rv"><div class="pane"><div class="t"><span>▬ signup.html — human DOM</span><span>~4.2 KB</span></div>
+<pre>&lt;!-- 12 layers of div wrappers --&gt;
+&lt;form class="js-auth-submit-v4" id="f_991823"&gt;
+  &lt;div class="grid-cell span-12 shadow-sm"&gt;
+    &lt;button type="button"
+      class="btn-cta-v2 hover:shadow flex"
+      data-analytics-id="btn_flow_final"&gt;
+        Submit Application
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</pre><div class="x">⚠ Noisy · ambiguous · brittle</div></div>
+<div class="pillc">→</div>
+<div class="pane ai"><div class="t"><span>◆ ai_dom.json</span><span class="tag" style="background:var(--or);color:#fff">SEMANTIC</span></div>
+<pre>{
+  "id": "action_submit_reg",
+  "type": "interactive_action",
+  "role": "submit",
+  "label": "Submit Application",
+  "risk": "medium",
+  "requires_confirmation": true,
+  "callable_method": "form.submit()"
+}</pre><div class="x">✓ Clean · typed · callable</div></div></div>
+<div class="note rv"><span style="color:var(--or)">▮</span><span><b>Zero website interference:</b> AgentBridge observes the live page and builds the model on the side — no changes to site code, no site-specific scrapers.</span></div>
+</div></section>
+
+<section class="alt" id="demo"><div class="w">
+<div class="dh"><div><div class="tag rv">● LIVE CONCEPT DEMO</div><h2 class="rv" style="margin-top:12px">Watch an agent use the web differently using AgentBridge.</h2>
+<p class="lead rv">Agent task: <code class="m" style="color:var(--ink)">“Summarize my unread emails”</code></p></div>
+<button class="btn" id="run">▶ Run with AgentBridge</button></div>
+<div class="card deck rv"><div class="inb"><div class="row"><span><b>Inbox</b></span><span class="tag">3 unread</span></div>
+<div class="row" data-r><span><b>Priya — Q3 roadmap review</b>Can we move the review to Thursday…</span><span class="m">10:42</span></div>
+<div class="row" data-r><span><b>Stripe — Payment received</b>Your payout of ₹48,200 is on the way…</span><span class="m">09:15</span></div>
+<div class="row" data-r><span><b>Recruiter — Interview invite</b>Confirm one of the slots below…</span><span class="m">Yesterday</span></div>
+<div class="row" style="opacity:.5"><span><b style="font-weight:400">Newsletter — Weekly digest</b>Read</span><span class="m">Mon</span></div></div>
+<div class="dark"><div class="h">● AGENTBRIDGE INSPECTOR</div><div id="lg"><div>&gt; Kernel initialized v0.1.0-alpha</div><div>&gt; Ephemeral DOM observer listening...</div><div>&gt; Ready for semantic agent query.</div></div>
+<div class="res" id="res"><div style="color:#A3A3A3">// High-level invocation</div><div style="color:#34D399;font-weight:600">gmail.get_unread()</div><div>→ Array&lt;EmailItem&gt; (3)</div><div>tokens: -94.2% · model calls: 1 vs 12</div><div style="margin-top:8px">✓ Verified in live DOM</div></div></div></div>
+</div></section>
+
+<section><div class="w">
+<div class="ey rv">Click faster vs click less</div><h2 class="rv">Don’t make the agent click faster. Make it click less.</h2>
+<p class="lead rv">Accelerating headless browser clicks still leaves latency, jitter, and DOM mutations in the hot path. True efficiency removes redundant browser roundtrips completely.</p>
+<div class="vs"><div class="card rv" style="background:var(--alt)"><div class="ch" style="color:var(--rd)"><span>Traditional vision loop</span><s style="background:#FEF2F2;color:#B91C1C">45 actions</s></div>
+<div class="lines"><div><span>screenshot → locate → click</span><b>3.2s</b></div><div><span>wait for page load</span><b>2.8s</b></div><div><span>re-observe → interpret</span><b>4.1s</b></div><div><span>repeat ×15 …</span><b>~14s</b></div></div>
+<div class="bg"><i data-w="100%" style="background:var(--rd)"></i></div>
+<div class="tot" style="margin-top:20px"><span>Total time ~<b class="cnt" data-n="24350">0</b> ms<br>Tokens ~<b class="cnt" data-n="18600">0</b></span><b>High overhead</b></div></div>
+<div class="card good rv" style="--d:.12s"><div class="ch"><span>● AgentBridge semantic agent</span><s style="background:var(--ort);color:var(--or)">1 action</s></div>
+<div class="lines"><div style="background:var(--alt)"><span>observe → build AI DOM</span><b>~5ms</b></div><div style="background:var(--alt)"><span>agent picks intent: bulk_extract</span><b>~120ms</b></div><div style="background:var(--alt)"><span>native execute + verify</span><b>~145ms</b></div></div>
+<div class="bg"><i data-w="6%" style="background:var(--or)"></i></div>
+<div class="tot" style="margin-top:20px"><span>Total time ~<b class="cnt" data-n="270">0</b> ms<br>Tokens ~<b class="cnt" data-n="1450">0</b></span><b>~92% fewer tokens</b></div></div></div>
+</div></section>
+
+<section class="alt"><div class="w c">
+<div class="ey rv">Architecture</div><h2 class="rv">Three layers. One semantic bridge.</h2>
+<p class="lead rv">Agents reason on top, the web stays as it is, and AgentBridge translates between them.</p>
+<div class="stack">
+<div class="card lay rv"><small>Layer 3</small><h4>Reasoning intelligence</h4><div class="chips"><span>Claude</span><span>GPT</span><span>Local LLM</span><span>MCP / WebSocket</span></div></div>
+<div class="wire rv">▼ semantic intent ▲</div>
+<div class="card lay core rv"><h4>Layer 2 · AgentBridge runtime core</h4><div class="mods"><div>AI DOM<small>semantic model</small></div><div>Executor<small>targets + verify</small></div><div>Optimizer<small>pattern lifting</small></div><div class="hl">Risk Engine<small>4-tier gating</small></div><div>State<small>live browser state</small></div><div>Tasks<small>lifecycle</small></div><div>Connectors<small>Gmail · generic</small></div><div>Local AI<small>Qwen3-0.6B</small></div></div></div>
+<div class="wire rv" style="color:var(--dim)">▼ observe / act ▲</div>
+<div class="card lay rv"><small>Layer 1</small><h4>The human web</h4><div class="chips"><span>E-commerce</span><span>News</span><span>Forms</span><span>Gmail</span><span>Any website</span></div></div>
+</div></div></section>
+
+<section><div class="w">
+<div class="ey rv">Safety &amp; risk control</div><h2 class="rv">AI agents should act. Not act blindly.</h2>
+<p class="lead rv">Autonomous browser execution creates operational risks. AgentBridge embeds deterministic policy enforcement directly into the runtime kernel before any action dispatches.</p>
+<div class="tiers">
+<div class="card tier t1 rv"><div><span class="tag">LOW</span><div><h5>Read &amp; observe</h5><p>Scrolling, reading, extracting visible content.</p></div></div><span class="act">Auto-execute</span></div>
+<div class="card tier t2 rv" style="--d:.08s"><div><span class="tag">MEDIUM</span><div><h5>Reversible input</h5><p>Typing into fields, filtering, navigating between pages.</p></div></div><span class="act">Execute + log</span></div>
+<div class="card tier t3 rv" style="--d:.16s"><div><span class="tag">HIGH</span><div><h5>Submissions &amp; messages</h5><p>Submitting forms, sending messages, changing settings.</p></div></div><span class="act">Confirm first</span></div>
+<div class="card tier t4 rv" style="--d:.24s"><div><span class="tag">CRITICAL</span><div><h5>Payments &amp; deletions</h5><p>Purchases, account deletion, irreversible operations.</p></div></div><span class="act">Human approval</span></div>
+</div></div></section>
+
+<section class="alt"><div class="w">
+<div class="ey rv">Connectors &amp; roadmap</div><h2 class="rv">Built to grow with the web.</h2>
+<p class="lead rv">Start with a universal kernel, then add pluggable connectors without touching core modules.</p>
+<div class="road">
+<div class="card ph d rv"><span class="st">DONE</span><span class="m" style="font-size:11px;color:var(--dim)">PHASE 0</span><h5>Specification &amp; RFCs</h5><p>Full protocol design, AI DOM semantic schema, MCP integration endpoints defined.</p><footer>docs/protocol.md</footer></div>
+<div class="card ph a rv" style="--d:.1s"><span class="st">ACTIVE</span><span class="m" style="font-size:11px;color:var(--or);font-weight:600">PHASE 1</span><h5>Browser extension kernel</h5><p>Chromium extension kernel, live AI DOM streaming, Gmail MVP connector validation.</p><footer>Manifest V3 · in progress</footer></div>
+<div class="card ph rv" style="--d:.2s"><span class="st">NEXT</span><span class="m" style="font-size:11px;color:var(--dim)">PHASE 2</span><h5>Pattern optimizer</h5><p>Automated repetition lifting, cross-site connector registry, multi-tab execution engine.</p><footer>planned</footer></div>
+<div class="card ph rv" style="--d:.3s"><span class="st">LATER</span><span class="m" style="font-size:11px;color:var(--dim)">PHASE 3</span><h5>Distributed agent mesh</h5><p>Multi-agent browser clusters, verifiable audit trails, enterprise zero-trust execution.</p><footer>planned</footer></div></div>
+<div class="card bm rv"><div><div class="tag">Benchmark</div><b style="display:block;margin:8px 0 4px">Measured against step-by-step agents</b><p>Summarizing 15 unread emails: 45 → 1 browser actions, 42.0s → 1.42s (29.6×). Reproduce with <span class="m">python -m benchmarks.benchmark_runner</span>.</p></div><span class="act m" style="font-size:11px;background:var(--alt);padding:8px 14px;border:1px solid var(--line);border-radius:8px">MIT · open source</span></div>
+</div></section>
+
+<section class="fin"><div class="w" style="position:relative"><span class="tag rv" style="border:1px solid rgba(255,90,42,.25);border-radius:99px;padding:4px 14px">● OPEN SOURCE · MIT</span>
+<h2 class="rv">Make the web agent-native. Starting today.</h2>
+<p class="lead rv">Install the Chrome extension, open the side panel, and watch your agent do in one action what used to take forty-five.</p>
+<a class="btn rv" href="#demo">Try the live demo<i>→</i></a></div></section>
+<footer class="f">© 2026 AgentBridge · MIT License</footer>
+<button id="top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+var rt=document.documentElement,tg=document.getElementById('tg'),ti=document.getElementById('ti'),tt=document.getElementById('tt');
+function th(d){rt.setAttribute('data-theme',d?'dark':'light');ti.textContent=d?'☾':'☀';tt.textContent=d?'Dark':'Light';try{localStorage.setItem('ab-theme',d?'dark':'light')}catch(e){}}
+var sv=null;try{sv=localStorage.getItem('ab-theme')}catch(e){}th(sv==='dark');
+tg.onclick=function(){th(rt.getAttribute('data-theme')!=='dark')};
+var h=document.getElementById('h1'),w=[['Make','the','existing','web'],['native','to','AI','agents.']],i=0;
+w.forEach(function(l,k){l.forEach(function(t){var s=document.createElement('span');s.style.setProperty('--i',i++);s.textContent=t+' ';if(k){var e=document.createElement('em');e.textContent=t+' ';s.textContent='';s.appendChild(e)}h.appendChild(s)});if(!k)h.appendChild(document.createElement('br'))});
+var cnt=function(el){var n=+el.dataset.n,t0=performance.now();(function f(t){var p=Math.min((t-t0)/1600,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3))).toLocaleString();if(p<1)requestAnimationFrame(f)})(t0)};
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target;t.classList.add('in');t.querySelectorAll('.bg i').forEach(function(b){b.style.width=b.dataset.w});t.querySelectorAll('.cnt').forEach(cnt);io.unobserve(t)})},{threshold:.18});
+document.querySelectorAll('.rv').forEach(function(e){io.observe(e)});
+var lines=['> observe(page) → AI DOM built · 14 entities','> intent: summarize_unread','> bulk_extract(emails) …','✓ 1 action · 0 screenshots'],ht=document.getElementById('ht');
+function type(k){if(k>=lines.length){setTimeout(function(){ht.textContent='';type(0)},4200);return}var s=lines[k],j=0;(function c(){ht.textContent=lines.slice(0,k).join('\n')+(k?'\n':'')+s.slice(0,++j);if(j<s.length)setTimeout(c,26);else setTimeout(function(){type(k+1)},500)})()}
+type(0);
+var run=document.getElementById('run'),lg=document.getElementById('lg'),res=document.getElementById('res'),rows=document.querySelectorAll('[data-r]'),busy=0;
+var seq=['> intent received: summarize_unread','> scanning inbox · AI DOM ready','> email_001 · Priya — Q3 roadmap review','> email_002 · Stripe — Payment received','> email_003 · Recruiter — Interview invite','> bulk_extract complete · risk: low'];
+function add(t,c){var d=document.createElement('div');d.className='l';d.textContent=t;if(c)d.style.color=c;lg.appendChild(d);lg.scrollTop=1e4}
+run.onclick=function(){if(busy)return;busy=1;lg.innerHTML='';res.classList.remove('s');rows.forEach(function(r){r.classList.remove('on')});
+seq.forEach(function(t,k){setTimeout(function(){add(t,k>1&&k<5?'#FF7A45':'');rows.forEach(function(r){r.classList.remove('on')});if(k>1&&k<5)rows[k-2].classList.add('on')},k*520)});
+setTimeout(function(){rows.forEach(function(r){r.classList.remove('on')});res.classList.add('s');busy=0},seq.length*520+200)};
+})();
+(function(){
+var sp=document.getElementById('sprog'),nv=document.querySelector('nav'),tp=document.getElementById('top'),glow=document.querySelector('.hero .glow'),ticking=false;
+var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function onScroll(){
+var h=document.documentElement,st=h.scrollTop||document.body.scrollTop,mx=h.scrollHeight-h.clientHeight;
+sp.style.width=(mx>0?(st/mx*100):0)+'%';
+nv.classList.toggle('scrolled',st>10);
+tp.classList.toggle('s',st>700);
+if(glow&&!rm&&st<900){glow.style.translate='0 '+(st*.12)+'px'}
+ticking=false;
+}
+addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+onScroll();
+tp.onclick=function(){scrollTo({top:0,behavior:'smooth'})};
+})();
+</script>
+<script>
+/* -- ScrollRevealText - vanilla port of the Framer component --
+ * Source: https://framer.com/m/ScrollRevealText-vXBxyx.js@ymLCSaN7wX7cJKeayNed
+ * (re-export of framerusercontent …/ScrollRevealText.js by AliThemes.com)
+ * Behavior ported 1:1 to dependency-free JS: split headings into words,
+ * stagger each word's opacity / color-mix / blur / rise against scroll
+ * progress (viewport 85% to 35%), rAF-throttled + IntersectionObserver
+ * gated, theme-aware via --ink / --dim so dark mode keeps working. */
+(function(){
+var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(RM) return;
+var targets=document.querySelectorAll('section h2, .sub2 h3');
+if(!targets.length) return;
+var DUR=0.7, STAG=0.25, Y=12, BLUR=3, items=[];
+targets.forEach(function(el){
+var text=el.textContent.replace(/\s+/g,' ').trim();
+if(!text) return;
+el.setAttribute('aria-label',text);
+el.innerHTML='';
+var words=text.split(' ');
+var spans=words.map(function(w,i){
+var s=document.createElement('span');
+s.className='srt-w'; s.textContent=w;
+el.appendChild(s);
+if(i<words.length-1) el.appendChild(document.createTextNode(' '));
+return s;
+});
+items.push({el:el,spans:spans});
+});
+function paint(it,p){
+var n=it.spans.length, total=DUR+(n-1)*STAG, t=p*total;
+for(var i=0;i<n;i++){
+var q=Math.max(0,Math.min(1,(t-i*STAG)/DUR));
+var e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;
+var s=it.spans[i];
+s.style.opacity=(.22+.78*e).toFixed(3);
+s.style.transform='translateY('+((1-e)*Y).toFixed(1)+'px)';
+s.style.filter=(BLUR>0&&e<1)?('blur('+((1-e)*BLUR).toFixed(1)+'px)'):'';
+s.style.color='color-mix(in srgb, var(--ink) '+Math.round(e*100)+'%, var(--dim))';
+}
+}
+var seen={}, scheduled=false;
+function prog(el){
+var r=el.getBoundingClientRect(), vh=window.innerHeight;
+var start=vh*.85, end=vh*.35;
+return Math.max(0,Math.min(1,(start-r.top)/(start-end)));
+}
+function update(){
+items.forEach(function(it,i){
+if(seen[i]===false) return;
+paint(it,prog(it.el));
+});
+scheduled=false;
+}
+function kick(){if(!scheduled){scheduled=true;requestAnimationFrame(update)}}
+var io=new IntersectionObserver(function(es){
+es.forEach(function(e){
+var idx=-1;
+for(var k=0;k<items.length;k++){if(items[k].el===e.target){idx=k;break}}
+if(idx>-1){seen[idx]=e.isIntersecting;if(e.isIntersecting)kick()}
+});
+},{rootMargin:'200px'});
+items.forEach(function(it,i){seen[i]=true;io.observe(it.el)});
+addEventListener('scroll',kick,{passive:true});
+addEventListener('resize',kick);
+update();
+})();
+</script></body></html>
